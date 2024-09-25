@@ -1,0 +1,41 @@
+---
+title: "Análise do Censo Escolar 2023"
+author: "Anderson Freitas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Introdução
+
+Este relatório apresenta uma análise exploratória dos dados do censo escolar de 2023. O objetivo é identificar as regiões com maior número de escolas e analisar a relação entre o tipo de dependência da escola e a disponibilidade de internet.
+
+## Análise Exploratória
+
+### Número de Escolas por Região
+
+```{r}
+# Carregar os dados
+censo_escolar <- read.csv("censo_escolar_2023.csv")
+
+# Agrupar os dados por região e contar o número de escolas
+escolas_por_regiao <- aggregate(
+  NO_UF ~ NO_REGIAO, 
+  data = censo_escolar, 
+  FUN = length
+)
+library(ggplot2)
+
+# Criar um gráfico de barras
+barplot(escolas_por_regiao$NO_UF, names.arg = escolas_por_regiao$NO_REGIAO,
+        main = "Número de Escolas por Região",
+        xlab = "Região", ylab = "Número de Escolas")
+  theme_minimal()
+
+# Criar uma tabela cruzada
+tabela_cruzada <- table(censo_escolar$TP_DEPENDENCIA, censo_escolar$IN_INTERNET)
+
+# Visualizar a tabela como um gráfico de barras empilhadas
+barplot(tabela_cruzada,
+        main = "Disponibilidade de Internet por Tipo de Dependência",
+        xlab = "Tipo de Dependência", ylab = "Frequência",
+        legend.text = c("Sem Internet", "Com Internet"))

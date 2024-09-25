@@ -1,0 +1,35 @@
+---
+title: "Análise do Censo Escolar 2023"
+author: "Anderson Freitas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Introdução
+
+Este relatório apresenta uma análise exploratória dos dados do censo escolar de 2023, com foco na frequência de determinados recursos nas escolas. O objetivo é identificar padrões na distribuição de recursos como laboratórios de informática, bibliotecas e acesso à internet, e analisar como esses recursos variam de acordo com diferentes características das escolas, como tipo de dependência (pública ou privada) e região geográfica.
+
+## Análise Exploratória
+
+### Número de Escolas por Região
+
+```{r}
+# Carregar os dados
+data <- read.csv("censo_escolar_2023.csv")
+
+# Example: Frequency of school dependency
+table(data$TP_DEPENDENCIA) %>%  # Removed %>% operator
+  as.data.frame() %>%
+  rename(Dependency_Type = Var1, Frequency = Freq)
+
+# Create a more readable table
+dependency_freq <- table(data$TP_DEPENDENCIA)
+dependency_freq <- as.data.frame(dependency_freq)  # Added assignment
+dependency_freq <- rename(dependency_freq, Dependency_Type = Var1, Frequency = Freq)  # Updated renaming
+
+# Visualize with a bar plot
+ggplot(dependency_freq, aes(x = Dependency_Type, y = Frequency)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Frequency of School Dependency",
+       x = "Dependency Type",
+       y = "Count")
